@@ -1,0 +1,72 @@
+{% extends 'base.html' %}{% block title %}AnonHelp — Главная{% endblock %}{% block content %}
+<section class="hero hero-modern hero-next reveal">
+    <div><span class="badge">Колледжная цифровая среда поддержки 2.0</span>
+        <h1>Анонимная помощь, сообщество и безопасная обратная связь</h1>
+        <p>AnonHelp объединяет обращения, взаимопомощь студентов, модерацию, уведомления и подбор категории в одной
+            понятной веб-системе.</p>
+        <div class="hero-actions"><a class="btn btn-primary"
+                href="{{ url_for('new_appeal') if current_user else url_for('register') }}">Начать работу</a><a
+                class="btn btn-secondary" href="{{ url_for('route_helper') }}">Подобрать маршрут</a><a
+                class="btn btn-secondary" href="{{ url_for('privacy_protocol') }}">Протокол анонимности</a></div>
+    </div>
+    <div class="hero-panel glass-card">
+        <div class="panel-top"><span></span><span></span><span></span></div>
+        <h3>Умный маршрут обращения</h3>
+        <div class="steps"><b>1</b>
+            <p>Студент описывает ситуацию, система автоматически скрывает личность</p>
+        </div>
+        <div class="steps"><b>2</b>
+            <p>маршрут помощи подсказывает категорию, приоритет и план действий</p>
+        </div>
+        <div class="steps"><b>3</b>
+            <p>Сообщество помогает советами, администратор отслеживает статус</p>
+        </div>
+    </div>
+</section>
+<section class="stats reveal">
+    <div class="stat-card pulse"><strong>{{ stats.users }}</strong><span>Пользователей</span></div>
+    <div class="stat-card pulse"><strong>{{ stats.appeals }}</strong><span>Обращений</span></div>
+    <div class="stat-card pulse"><strong>{{ stats.comments }}</strong><span>Комментариев</span></div>
+    <div class="stat-card pulse"><strong>{{ stats.resolved }}</strong><span>Решено</span></div>
+</section>
+<section class="feature-wall reveal">
+    <div class="feature-big"><span class="badge">Вишенка проекта</span>
+        <h2>Маршрут помощи помогает студенту оформить обращение</h2>
+        <p>Система анализирует текст ситуации по ключевым признакам, предлагает категорию, приоритет и безопасный
+            маршрут действий. Это показывает, что проект не просто принимает сообщения, а помогает безопасно оформить
+            запрос.</p><a class="btn btn-primary" href="{{ url_for('route_helper') }}">Открыть маршрут помощи</a>
+    </div>
+    <div class="feature-list">
+        <div>🧠 <b>Авто-категория</b><span>буллинг, стресс, учеба, конфликт</span></div>
+        <div>⚡ <b>Приоритет</b><span>обычная, важная или срочная ситуация</span></div>
+        <div>🛡️ <b>Безопасность</b><span>подсказка, когда лучше скрыть личность</span></div>
+    </div>
+</section>
+<section class="cards-grid reveal">
+    <article class="info-card"><i class="icon">🛡️</i>
+        <h3>Конфиденциальность</h3>
+        <p>Личность студента скрывается автоматически: администратор видит обращение, но не автора.</p>
+    </article>
+    <article class="info-card"><i class="icon">🤝</i>
+        <h3>Взаимопомощь</h3>
+        <p>Лента поддержки помогает студентам обмениваться советами и материалами.</p>
+    </article>
+    <article class="info-card"><i class="icon">📎</i>
+        <h3>Вложения</h3>
+        <p>К обращению можно прикрепить скриншоты или документы для модератора.</p>
+    </article>
+</section>
+<section class="table-card reveal">
+    <div class="section-head">
+        <h2>Последние публичные обращения</h2>{% if current_user %}<a href="{{ url_for('feed') }}">Перейти к ленте
+            →</a>{% endif %}
+    </div>
+    <div class="simple-list">{% for a in latest %}<a class="simple-item"
+            href="{{ url_for('appeal_detail', appeal_id=a.id) if current_user else url_for('login') }}">
+            <div><b>{{ a.title }}</b>
+                <p>{{ a.category }} • {{ a.created_at.strftime('%d.%m.%Y %H:%M') }} • 💬 {{ a.comments|length }} • 👍 {{
+                    a.support_count }}</p>
+            </div><span class="status-chip">{{ a.status }}</span>
+        </a>{% else %}<div class="empty-state">Пока нет публичных обращений.</div>{% endfor %}</div>
+</section>
+{% endblock %}
